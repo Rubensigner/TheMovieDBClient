@@ -9,7 +9,9 @@
             "path": "/3",
             "images_url": "http://image.tmdb.org/t/p",
             "timeout": 5000,
-            "update_images_url": true
+            "update_images_url": true,
+            "language": "en-US",
+            "include_image_language": "en,null"
         };
 
         var tmdbConfig = null;
@@ -32,6 +34,8 @@
             settings.images_url = options.host || settings.images_url;
             settings.timeout = options.timeout || settings.timeout;
             settings.update_images_url = options.update_images_url || settings.update_images_url;
+            settings.language = options.language || settings.language;
+            settings.include_image_language = options.include_image_language || settings.include_image_language;
         };
 
         tmdb.prototype.call = function (url, params) {
@@ -46,7 +50,7 @@
                 try {
                     var httpOptions = {
                         host: settings.host,
-                        path: settings.path + url + "?" + params_str,
+                        path: settings.path + url + "?" + params_str + "&language=" + settings.language + "&include_image_language=" + settings.include_image_language,
                         headers: {
                             'Accept': 'application/json'
                         },
@@ -68,7 +72,7 @@
                     });
 
                     request.setTimeout(settings.timeout, function () {
-                        reject("Request timed out: " + settings.path + url + "?" + params_str);
+                        reject("Request timed out: " + settings.path + url + "?" + params_str + "&language=" + settings.language + "&include_image_language=" + settings.include_image_language);
                     });
 
                     request.on('error', function (err) {
